@@ -32,13 +32,13 @@ export async function activate(context: ExtensionContext) {
     .replace(/^~/, homedir())
 
   if (isDetect) {
-    workspace.ready.then(detectFileName)
-
-    workspace.registerAutocmd({
-      event: 'BufEnter',
-      request: false,
-      callback: detectFileName
-    })
+    context.subscriptions.push(
+      workspace.registerAutocmd({
+        event: 'BufEnter',
+        request: false,
+        callback: detectFileName
+      })
+    )
   }
 
   context.subscriptions.push(
@@ -52,10 +52,15 @@ export async function activate(context: ExtensionContext) {
     )
   )
 
-  commands.registerCommand('post.do', doPost)
-  commands.registerCommand('post.new', () => {
-    newPost(postRootPath)
-  })
+  context.subscriptions.push(
+    commands.registerCommand('post.do', doPost)
+  )
+
+  context.subscriptions.push(
+    commands.registerCommand('post.new', () => {
+      newPost(postRootPath)
+    })
+  )
 
   context.subscriptions.push(
     listManager.registerList(new Post(postRootPath))

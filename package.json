@@ -1,0 +1,38 @@
+{
+  "name": "coc-post",
+  "version": "0.0.1",
+  "description": "post extension for coc.nvim",
+  "main": "./out/index.js",
+  "repository": "git@github.com:iamcco/coc-post.git",
+  "author": "iamcco <ooiss@qq.com>",
+  "license": "MIT",
+  "private": false,
+  "engines": {
+    "coc": "^0.0.67"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "contributes": {
+    "configuration": {
+      "title": "diagnostic-languageserver",
+      "properties": {
+        "diagnostic-languageserver.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "enable this extension?"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p ./"
+  },
+  "devDependencies": {
+    "coc.nvim": "^0.0.67",
+    "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "vscode-languageserver-protocol": "^3.14.1"
+  }
+}

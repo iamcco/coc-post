@@ -2,6 +2,13 @@
   "name": "coc-post",
   "version": "0.0.1",
   "description": "post extension for coc.nvim",
+  "keywords": [
+    "coc.nvim",
+    "post",
+    "postman",
+    "request",
+    "api"
+  ],
   "main": "./out/index.js",
   "repository": "git@github.com:iamcco/coc-post.git",
   "author": "iamcco <ooiss@qq.com>",
@@ -14,13 +21,35 @@
     "*"
   ],
   "contributes": {
+    "commands": [
+      {
+        "command": "post.do",
+        "title": "do request of current post file",
+        "category": "post"
+      },
+      {
+        "command": "post.new",
+        "title": "create a new post file",
+        "category": "post"
+      }
+    ],
     "configuration": {
-      "title": "diagnostic-languageserver",
+      "title": "enable",
       "properties": {
-        "diagnostic-languageserver.enable": {
+        "post.enable": {
           "type": "boolean",
           "default": true,
           "description": "enable this extension?"
+        },
+        "post.detect": {
+          "type": "boolean",
+          "default": true,
+          "description": "is enable detect filetype for *.post file"
+        },
+        "post.root": {
+          "type": "string",
+          "default": "~/.coc-post",
+          "description": "directory to save post file with post.new command"
         }
       }
     }
@@ -29,10 +58,12 @@
     "build": "tsc -p ./"
   },
   "devDependencies": {
+    "@types/node-fetch": "^2.3.4",
     "coc.nvim": "^0.0.67",
     "typescript": "^3.4.5"
   },
   "dependencies": {
+    "node-fetch": "^2.6.0",
     "vscode-languageserver-protocol": "^3.14.1"
   }
 }

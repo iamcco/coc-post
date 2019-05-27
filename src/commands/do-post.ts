@@ -3,10 +3,19 @@ import fetch from 'node-fetch';
 
 let channel: OutputChannel
 
-const print = (channel: OutputChannel, name: string, text: string, notStartNewLine?: boolean) => {
-  channel.append(`${notStartNewLine ? '' : '\n'}${name}: ====================>>\n`)
+const print = (
+  channel: OutputChannel,
+  name: string,
+  text: string,
+  notStartNewLine?: boolean,
+  inline?: boolean,
+  fold?: boolean
+) => {
+  !inline && channel.append(`${notStartNewLine ? '' : '\n'}${name}: ====================>>\n`)
+  fold && channel.append('{{{\n')
   channel.append(`\n${text}\n`)
-  channel.append(`\n${name}: ====================<<\n`)
+  fold && channel.append('\n}}}')
+  !inline && channel.append(`\n${name}: ====================<<\n`)
 }
 
 export const doPost = async () => {
@@ -69,8 +78,8 @@ export const doPost = async () => {
           ...params
         }, null, 2), true)
         const res = await fetch(url, params)
-        print(channel, 'Status', `${res.status} - ${res.statusText}`)
-        print(channel, 'Headers', JSON.stringify(res.headers.raw(), null, 2))
+        print(channel, 'Status', `Status: ${res.status} - ${res.statusText}`, false, true)
+        print(channel, 'Headers', JSON.stringify(res.headers.raw(), null, 2), false, false, true)
         const text = await res.text()
         try {
           const json = JSON.parse(text)
@@ -78,6 +87,21 @@ export const doPost = async () => {
         } catch (error) {
           print(channel, 'Body', text)
         }
+        setTimeout(async () => {
+          const wins = await workspace.nvim.windows
+          if (wins) {
+            for (let len = 0; len < wins.length; len++) {
+              const win = wins[len];
+              const buf = await win.buffer
+              const name = await buf.name
+              if (name === 'output:///post') {
+                win.setOption('wrap', false, true)
+                win.setOption('foldenable', true, true)
+                win.setOption('foldmethod', 'marker', true)
+              }
+            }
+          }
+        }, 0);
       } catch (error) {
         print(channel, 'Error', error.stack || error.message || error)
       }

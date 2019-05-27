@@ -38,6 +38,7 @@ export const doPost = async () => {
       const line = lines[idx];
       if (line.trim() === '') {
         isPasterHeadersDone = true
+        continue
       }
       if (!isPasterHeadersDone) {
         const m = line.match(/^[ \t]*([^ \t]+?):[ \t]+(.*)$/)
@@ -60,18 +61,19 @@ export const doPost = async () => {
           method,
           headers,
         }
+        const content = body.join('\n')
         if (method !== 'GET') {
           const contentType = headers['Content-Type']
           if (contentType && /application\/json/.test(contentType)) {
             try {
-              params['body'] = JSON.stringify(eval(`(${body.join('').trim()})`))
+              params['body'] = JSON.stringify(eval(`(${content})`))
             } catch (error) {
-              params['body'] = body.join('\n')
+              params['body'] = content
             }
           } else if (contentType && /application\/x-www-form-urlencoded/.test(contentType)) {
-            params['body'] = encodeURI(body.join('\n'))
+            params['body'] = encodeURI(content)
           } else {
-            params['body'] = body.join('\n')
+            params['body'] = content
           }
         }
         channel.clear()

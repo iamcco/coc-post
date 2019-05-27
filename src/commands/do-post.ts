@@ -11,11 +11,11 @@ const print = (
   inline?: boolean,
   fold?: boolean
 ) => {
-  !inline && channel.append(`${notStartNewLine ? '' : '\n'}${name}: ====================>>\n`)
+  !inline && channel.append(`${notStartNewLine ? '' : '\n'}${name}: `.padEnd(30, '=') + '<<\n')
   fold && channel.append('{{{\n')
   channel.append(`\n${text}\n`)
   fold && channel.append('\n}}}')
-  !inline && channel.append(`\n${name}: ====================<<\n`)
+  !inline && channel.append(`\n${name}: `.padEnd(30, '=') + '<<\n')
 }
 
 export const doPost = async () => {
@@ -61,12 +61,15 @@ export const doPost = async () => {
           headers,
         }
         if (method !== 'GET') {
-          if (headers['Content-Type'] && /json/.test(headers['Content-Type'])) {
+          const contentType = headers['Content-Type']
+          if (contentType && /application\/json/.test(contentType)) {
             try {
               params['body'] = JSON.stringify(eval(`(${body.join('').trim()})`))
             } catch (error) {
               params['body'] = body.join('\n')
             }
+          } else if (contentType && /application\/x-www-form-urlencoded/.test(contentType)) {
+            params['body'] = encodeURI(body.join('\n'))
           } else {
             params['body'] = body.join('\n')
           }

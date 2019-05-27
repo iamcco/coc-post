@@ -1,6 +1,6 @@
 {
   "name": "coc-post",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "post extension for coc.nvim",
   "keywords": [
     "coc.nvim",

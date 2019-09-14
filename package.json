@@ -1,6 +1,6 @@
 {
   "name": "coc-post",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "post extension for coc.nvim",
   "keywords": [
     "coc.nvim",
@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@types/node-fetch": "^2.3.4",
-    "coc.nvim": "^0.0.67",
+    "coc.nvim": "^0.0.73",
     "typescript": "^3.4.5"
   },
   "dependencies": {

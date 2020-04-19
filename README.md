@@ -40,6 +40,11 @@ List:
   "type": "string",
   "default": "~/.coc-post",
   "description": "directory to save post file with post.new command"
+},
+"post.agent": {
+  "type": "string",
+  "default": "",
+  "description": "Proxy agent, format like: http://168.63.76.32:3128"
 }
 ```
 

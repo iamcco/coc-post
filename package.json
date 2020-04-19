@@ -1,6 +1,6 @@
 {
   "name": "coc-post",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "post extension for coc.nvim",
   "keywords": [
     "coc.nvim",
@@ -50,6 +50,11 @@
           "type": "string",
           "default": "~/.coc-post",
           "description": "directory to save post file with post.new command"
+        },
+        "post.agent": {
+          "type": "string",
+          "default": "",
+          "description": "Proxy agent, format like: http://168.63.76.32:3128"
         }
       }
     }
@@ -59,11 +64,12 @@
   },
   "devDependencies": {
     "@types/node-fetch": "^2.3.4",
-    "coc.nvim": "^0.0.73",
-    "typescript": "^3.4.5"
+    "coc.nvim": "^0.0.77",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
+    "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.0",
-    "vscode-languageserver-protocol": "^3.14.1"
+    "vscode-languageserver-protocol": "^3.15.3"
   }
 }

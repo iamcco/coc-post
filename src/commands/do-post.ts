@@ -1,5 +1,6 @@
 import { OutputChannel, workspace } from 'coc.nvim';
-import fetch from 'node-fetch';
+import fetch, {RequestInit} from 'node-fetch';
+import createHttpProxy from 'https-proxy-agent';
 
 let channel: OutputChannel
 
@@ -57,7 +58,7 @@ export const doPost = async () => {
     }
     if (url) {
       try {
-        const params = {
+        const params: RequestInit = {
           method,
           headers,
         }
@@ -82,6 +83,11 @@ export const doPost = async () => {
           url,
           ...params
         }, null, 2), true)
+        const postConfig = workspace.getConfiguration('post')
+        const proxy = postConfig.get<string>('agent', '')
+        if (proxy) {
+          params.agent = createHttpProxy(proxy)
+        }
         const res = await fetch(url, params)
         print(channel, 'Status', `Status: ${res.status} - ${res.statusText}`, false, true)
         print(channel, 'Headers', JSON.stringify(res.headers.raw(), null, 2), false, false, true)

@@ -1,6 +1,7 @@
 import { OutputChannel, workspace } from 'coc.nvim';
 import fetch, {RequestInit} from 'node-fetch';
 import createHttpProxy from 'https-proxy-agent';
+import prettyHrtime from 'pretty-hrtime';
 
 let channel: OutputChannel
 
@@ -88,8 +89,11 @@ export const doPost = async () => {
         if (proxy) {
           params.agent = createHttpProxy(proxy)
         }
+        const startTime = process.hrtime()
         const res = await fetch(url, params)
+        const timeTaken = process.hrtime(startTime)
         print(channel, 'Status', `Status: ${res.status} - ${res.statusText}`, false, true)
+        print(channel, 'Time', `Time: ${prettyHrtime(timeTaken)}`, false, true)
         print(channel, 'Headers', JSON.stringify(res.headers.raw(), null, 2), false, false, true)
         const text = await res.text()
         try {

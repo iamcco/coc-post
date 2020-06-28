@@ -64,12 +64,14 @@
   },
   "devDependencies": {
     "@types/node-fetch": "^2.3.4",
+    "@types/pretty-hrtime": "^1.0.0",
     "coc.nvim": "^0.0.77",
     "typescript": "^3.8.3"
   },
   "dependencies": {
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.0",
+    "pretty-hrtime": "^1.0.3",
     "vscode-languageserver-protocol": "^3.15.3"
   }
 }

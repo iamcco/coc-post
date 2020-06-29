@@ -36,6 +36,16 @@ export const doPost = async () => {
     let url = ''
     let method = 'GET'
     let body = []
+
+    if (lines[0]) {
+      const line = lines[0];
+      const matches = line.match(/^(POST|GET|HEAD|OPTIONS|PATCH|PUT) (http.+)$/i);
+      if (matches) {
+        method = matches[1];
+        url = matches[2];
+      }
+    }
+
     for (let idx = 0; idx < lines.length; idx++) {
       const line = lines[idx];
       if (line.trim() === '') {

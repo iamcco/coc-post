@@ -37,15 +37,6 @@ export const doPost = async () => {
     let method = 'GET'
     let body = []
 
-    if (lines[0]) {
-      const line = lines[0];
-      const matches = line.match(/^(POST|GET|HEAD|OPTIONS|PATCH|PUT) (http.+)$/i);
-      if (matches) {
-        method = matches[1];
-        url = matches[2];
-      }
-    }
-
     for (let idx = 0; idx < lines.length; idx++) {
       const line = lines[idx];
       if (line.trim() === '') {
@@ -61,6 +52,12 @@ export const doPost = async () => {
             url = m[2]
           } else {
             headers[m[1]] = m[2]
+          }
+        } else {
+          const singleRowMethodUrlDeclaration = line.match(/^(POST|GET|HEAD|OPTIONS|PATCH|PUT) (http.+)$/i);
+          if (singleRowMethodUrlDeclaration) {
+            method = singleRowMethodUrlDeclaration[1];
+            url = singleRowMethodUrlDeclaration[2];
           }
         }
       } else {

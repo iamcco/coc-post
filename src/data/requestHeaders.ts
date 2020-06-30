@@ -4,6 +4,7 @@
 
 export interface requestHeader {
   name: string
+  isMethod?: boolean
   values: string[]
   document: string[]
 }
@@ -771,3 +772,22 @@ export const requestHeaders: Record<string, requestHeader> = {
     ]
   },
 }
+
+// add method autocomplete
+;([ "GET", "POST", "HEAD", "OPTIONS", "DELETE", "PUT", "PATCH", "TRACE", "CONNECT" ] as string[]).forEach((method) => {
+  requestHeaders[method] = {
+    name: method,
+    values: [],
+    isMethod: true,
+    document: [
+      `${method} http(s)?://xxx`,
+      '',
+      'same as below:',
+      '',
+      '```',
+      `Method: ${method}`,
+      'URL: http(s)?://xxx',
+      '```'
+    ]
+  }
+})

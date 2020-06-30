@@ -54,7 +54,7 @@ export const doPost = async () => {
             headers[m[1]] = m[2]
           }
         } else {
-          const singleRowMethodUrlDeclaration = line.match(/^(POST|GET|HEAD|OPTIONS|PATCH|PUT) (http.+)$/i);
+          const singleRowMethodUrlDeclaration = line.match(/^(POST|GET|HEAD|OPTIONS|PATCH|PUT|DELETE|TRACE|CONNECT) (http.+)$/i);
           if (singleRowMethodUrlDeclaration) {
             method = singleRowMethodUrlDeclaration[1];
             url = singleRowMethodUrlDeclaration[2];

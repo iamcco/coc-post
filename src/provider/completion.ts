@@ -13,7 +13,7 @@ export const completionProvider: CompletionItemProvider = {
       return Object.keys(requestHeaders).map<CompletionItem>(name => ({
         label: name,
         kind: CompletionItemKind.Method,
-        insertText: `${name}: `,
+        insertText: requestHeaders[name].isMethod ? `${name} ` : `${name}: `,
         documentation: {
           kind: MarkupKind.Markdown,
           value: requestHeaders[name].document.join('\n')

@@ -9,6 +9,9 @@ import Post from './source/post';
 async function detectFileName() {
   const doc = await workspace.document
   if (doc && doc.buffer) {
+    if (!(await doc.buffer.valid)) {
+      return
+    }
     const filetype = await doc.buffer.getOption('filetype') as string
     if (filetype && filetype.trim() !== '') {
       return
@@ -53,7 +56,11 @@ export async function activate(context: ExtensionContext) {
   )
 
   context.subscriptions.push(
-    commands.registerCommand('post.do', doPost)
+    commands.registerCommand('post.do', () => {
+      setTimeout(() => {
+        doPost()
+      }, 500);
+    })
   )
 
   context.subscriptions.push(

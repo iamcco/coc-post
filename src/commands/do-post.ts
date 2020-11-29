@@ -54,7 +54,7 @@ export const doPost = async () => {
             headers[m[1]] = m[2]
           }
         } else {
-          const singleRowMethodUrlDeclaration = line.match(/^(POST|GET|HEAD|OPTIONS|PATCH|PUT|DELETE|TRACE|CONNECT) (http.+)$/i);
+          const singleRowMethodUrlDeclaration = line.match(/^(POST|GET|HEAD|OPTIONS|PATCH|PUT|DELETE|TRACE|CONNECT)\s+([^ \t].+)$/i);
           if (singleRowMethodUrlDeclaration) {
             method = singleRowMethodUrlDeclaration[1];
             url = singleRowMethodUrlDeclaration[2];
@@ -66,6 +66,9 @@ export const doPost = async () => {
     }
     if (url) {
       try {
+        if (!url.startsWith('http')) {
+          url = `https://${url}`
+        }
         const params: RequestInit = {
           method,
           headers,
@@ -85,6 +88,7 @@ export const doPost = async () => {
             params['body'] = content
           }
         }
+        channel.hide()
         channel.clear()
         channel.show()
         print(channel, 'Request', JSON.stringify({
@@ -127,6 +131,11 @@ export const doPost = async () => {
       } catch (error) {
         print(channel, 'Error', error.stack || error.message || error)
       }
+    } else {
+      channel.hide()
+      channel.clear()
+      channel.show()
+      print(channel, 'Error', 'Url is required')
     }
   }
 }

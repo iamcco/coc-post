@@ -1,10 +1,20 @@
 import { ExtensionContext, languages, workspace, commands, listManager } from 'coc.nvim';
 import { homedir } from 'os';
+import fs from 'fs';
+import path from 'path';
 
 import { completionProvider } from './provider/completion';
 import { doPost } from './commands/do-post';
 import { newPost } from './commands/new-post';
 import Post from './source/post';
+
+async function isExists (p: string) {
+  return new Promise((resolve) => {
+    fs.exists(p, (exists) => {
+      resolve(exists)
+    })
+  })
+}
 
 async function detectFileName() {
   const doc = await workspace.document
@@ -16,10 +26,7 @@ async function detectFileName() {
     if (filetype && filetype.trim() !== '') {
       return
     }
-    const name = await doc.buffer.name
-    if (name && /\.post$/i.test(name)) {
-      doc.buffer.setOption('filetype', 'post')
-    }
+    doc.buffer.setOption('filetype', 'post')
   }
 }
 
@@ -31,13 +38,22 @@ export async function activate(context: ExtensionContext) {
   }
 
   const isDetect = config.get<boolean>('detect', true)
-  const postRootPath = config.get<string>('root', '~/.coc-post')
-    .replace(/^~/, homedir())
+  let postRootPath = config.get<string>('root', '')
+  if (postRootPath === '') {
+    if (await isExists(path.join(homedir(), '.coc-post'))) {
+      postRootPath = path.join(homedir(), '.coc-post')
+    } else {
+      postRootPath = context.storagePath
+    }
+  }
+
+  workspace.ready.then(detectFileName)
 
   if (isDetect) {
     context.subscriptions.push(
       workspace.registerAutocmd({
-        event: 'BufEnter',
+        event: ['BufNewFile','BufRead'],
+        pattern: '*.post',
         request: false,
         callback: detectFileName
       })

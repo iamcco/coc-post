@@ -47,8 +47,6 @@ export async function activate(context: ExtensionContext) {
     }
   }
 
-  workspace.ready.then(detectFileName)
-
   if (isDetect) {
     context.subscriptions.push(
       workspace.registerAutocmd({
@@ -88,4 +86,14 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(
     listManager.registerList(new Post(postRootPath))
   )
+
+  // detect open document
+  const doc = await workspace.document
+  if (!doc || !doc.textDocument) {
+    return
+  }
+  if (!doc.textDocument.uri.endsWith('.post')) {
+    return
+  }
+  detectFileName()
 }

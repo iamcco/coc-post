@@ -1,4 +1,4 @@
-import { OutputChannel, workspace } from 'coc.nvim';
+import { OutputChannel, workspace, window } from 'coc.nvim';
 import fetch, {RequestInit} from 'node-fetch';
 import createHttpProxy from 'https-proxy-agent';
 import prettyHrtime from 'pretty-hrtime';
@@ -22,7 +22,7 @@ const print = (
 
 export const doPost = async () => {
   if (!channel) {
-    channel = workspace.createOutputChannel('post')
+    channel = window.createOutputChannel('post')
   }
   const document = await workspace.document
   if (document && document.textDocument) {
